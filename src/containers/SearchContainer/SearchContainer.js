@@ -71,7 +71,7 @@ class SearchContainer extends React.Component {
     return <main className="container">
       <Header />
       <SearchForm onSubmit={this.onSubmit} search={this.state.search} />
-      <RepositoryList repositories={this.state.results} loading={this.state.loading} queried={this.state.queried} search={this.state.search} />
+      <RepositoryList data={this.state.results} loading={this.state.loading} queried={this.state.queried} search={this.state.search} />
     </main>
   }
 }

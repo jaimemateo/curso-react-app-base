@@ -3,16 +3,17 @@ import React, { PropTypes } from 'react';
 // Componentes
 import HintMessage from '../HintMessage';
 import ReleaseRow from '../ReleaseRow';
+import Paginator from '../Paginator';
 
 /**
- * Muestra la lista de Releases
+ * Muestra la lista de data
  */
 class ReleaseList extends React.PureComponent {
   /**
    * Props of the component
    */
   static propTypes = {
-    releases: PropTypes.arrayOf(PropTypes.object).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
     repoName: PropTypes.string.isRequired
   }
@@ -21,11 +22,11 @@ class ReleaseList extends React.PureComponent {
     let text = '';
 
     if (this.props.loading) {
-      text = <span>Retrieving releases of <b>{ this.props.repoName }</b></span>;
-    } else if (this.props.releases.length === 0) {
+      text = <span>Retrieving data of <b>{ this.props.repoName }</b></span>;
+    } else if (this.props.data.length === 0) {
       text = <span><b>{ this.props.repoName }</b> doesn't have any public release</span>;
     } else {
-      text = <span>Showing <b>{ this.props.releases.length }</b> releases of <b>{ this.props.repoName }</b></span>;
+      text = <span>Showing <b>{ this.props.data.length }</b> data of <b>{ this.props.repoName }</b></span>;
     }
 
     return <HintMessage>{ text }</HintMessage>;
@@ -33,7 +34,7 @@ class ReleaseList extends React.PureComponent {
 
   // Renderizamos la tabla si no estamos cargando resultados
   renderTable() {
-    if (this.props.loading || this.props.releases.length === 0) {
+    if (this.props.loading || this.props.data.length === 0) {
       return null;
     } else {
       return <table className="u-full-width">
@@ -46,7 +47,7 @@ class ReleaseList extends React.PureComponent {
           </tr>
         </thead>
         <tbody>
-          { this.props.releases.map(release =>
+          { this.props.data.map(release =>
             <ReleaseRow release={ release } key={ release.id } />
           )}
         </tbody>
@@ -66,4 +67,4 @@ class ReleaseList extends React.PureComponent {
 }
 
 // Export the class
-export default ReleaseList;
+export default Paginator(ReleaseList);

@@ -2,12 +2,13 @@ import React, { PropTypes } from 'react';
 
 import RepositoryRow from '../RepositoryRow';
 import HintMessage from '../HintMessage';
+import Paginator from '../Paginator';
 /**
  * Muestra los repositorios en una lista.
  */
 class RepositoryList extends React.PureComponent {
   static propTypes = {
-    repositories: PropTypes.arrayOf(PropTypes.object).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
     queried: PropTypes.bool.isRequired,
     search: PropTypes.string.isRequired
@@ -16,14 +17,14 @@ class RepositoryList extends React.PureComponent {
    * Render the RepositoryList component
    */
    renderMessage() {
-     let text = "", l = this.props.repositories.length;
+     let text = "", l = this.props.data.length;
 
      text = 'Holi';
      return <HintMessage>{text}</HintMessage>;
    }
 
    renderTable() {
-     if (this.props.repositories.length === 0) {return null;}
+     if (this.props.data.length === 0) {return null;}
 
      return
    }
@@ -38,4 +39,4 @@ class RepositoryList extends React.PureComponent {
 }
 
 // Export the class
-export default RepositoryList;
+export default Paginator(RepositoryList);
