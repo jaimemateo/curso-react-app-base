@@ -15,51 +15,34 @@ import { connect } from 'react-redux';
  * Muestra un buscador, así como la lista de resultados.
  */
 class SearchContainer extends React.Component {
+
   constructor(props) {
     super(props);
 
     // Binds
     this.onSubmit = this.onSubmit.bind(this);
-
   }
 
 
   /**
-   * Datos falsos. Los utilizamos en desarrollo hasta que leamos los datos de
-   * la API.
+   * Este método actua como callback del evento onSubmit del formulario.
+   * Recibe como parámetro el campo que debe de buscar.
    */
-  stubData() {
-    let repo = {
-      full_name: 'My Repository',
-      owner: {
-        login: 'Angel',
-        avatar_url: 'https://avatars.githubusercontent.com/u/4056725?v=3',
-        html_url: 'https://github.com/Angelmmiguel'
-      },
-      stargazers_count: 10,
-      forks_count: 5
-    }
-    return [
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo),
-      Object.assign({}, repo)
-    ]
-  }
-
-  onSubmit(value) {
-    // Lanzamos
+  onSubmit = value => {
+    // Lanzamos la accion!
     this.props.dispatch(startSearch(value));
-
-    setTimeout(() => {
-      this.props.dispatch(successSearch(this.stubData()));
-    }, 2000);
+    // Realizamos la petición a la API
+    fetch(`https://api.github.com/search/repositories?q=${ value }`)
+      .then(res => {
+        return res.json();
+      })
+      .then(res => {
+        this.props.dispatch(successSearch(res.items));
+      })
+      .catch(err => {
+        // Mostramos el error por consola
+        console.log(err);
+      })
   }
 
 
@@ -67,10 +50,12 @@ class SearchContainer extends React.Component {
    * Render the SearchContainer component
    */
   render() {
-    return <main className="container">
-      <SearchForm onSubmit={this.onSubmit} search={this.props.search} />
-      <RepositoryList data={this.props.results} loading={this.props.loading} queried={this.props.queried} search={this.props.search} />
-    </main>
+    return <section>
+      <SearchForm onSubmit={ this.onSubmit } search={ this.props.search } />
+      <RepositoryList data={ this.props.results } total={ this.props.results.length }
+        loading={ this.props.loading } search={ this.props.search }
+        queried={ this.props.queried } />
+    </section>
   }
 }
 
